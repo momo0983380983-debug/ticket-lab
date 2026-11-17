@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="iPhone Safari 購票流程練習與人工購票輔助工具；不連線監控或操作真實售票系統。">
+  <title>Ticket Lab｜iPhone 購票練習助手</title>
+  <style>
+    :root {color-scheme:dark; --bg:#0b101b; --surface:#151e2d; --surface2:#1b2739; --line:#334155; --text:#f1f5f9; --muted:#a7b5c9; --brand:#a5b4fc; --accent:#818cf8; --good:#86efac; --warn:#fbbf24}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif;background:radial-gradient(circle at 50% -180px,#263257 0,transparent 480px),var(--bg);color:var(--text);font-size:16px;line-height:1.5;}
+    a{color:var(--brand)} button,input,select{font:inherit} button{cursor:pointer} button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #fcd34d;outline-offset:3px}
+    .shell{max-width:650px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 24px) 17px calc(env(safe-area-inset-bottom) + 52px)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}.brand{font-size:1.15rem;font-weight:900;letter-spacing:.04em}.brand i{color:var(--brand);font-style:normal}.pill{border:1px solid #52607b;color:#c7d2fe;background:#24304a;border-radius:999px;padding:6px 11px;font-size:.76rem;font-weight:700;white-space:nowrap}
+    .hero{padding:23px 21px;border:1px solid #475569;border-radius:24px;background:linear-gradient(145deg,#25335a,#172132 72%);box-shadow:0 18px 48px #0004}.eyebrow{font-size:.78rem;color:#c7d2fe;font-weight:800;letter-spacing:.1em}.hero h1{font-size:1.66rem;line-height:1.2;letter-spacing:-.03em;margin:9px 0}.hero p{margin:0;color:#cbd5e1}.event-line{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.event-line span{border:1px solid #55627c;background:#ffffff10;padding:5px 9px;border-radius:9px;color:#e2e8f0;font-size:.82rem}
+    .nav{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:22px 0 16px;border:1px solid var(--line);padding:5px;border-radius:15px;background:#131d2d}.tab{border:0;background:transparent;color:#bdc9dd;padding:12px 6px;font-weight:800;border-radius:11px}.tab[aria-selected="true"]{color:#fff;background:#4658a4;box-shadow:0 1px 8px #0005}
+    .panel{display:none}.panel.is-active{display:block}.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:19px;margin:0 0 15px}.card h2{margin:0 0 8px;font-size:1.16rem}.card p{margin:6px 0 12px;color:var(--muted);font-size:.9rem}.subtle{color:var(--muted);font-size:.83rem}.label{display:block;margin:12px 0 8px;font-size:.89rem;font-weight:800}.area-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}.area{background:var(--surface2);color:#f1f5f9;text-align:left;border:1.5px solid #3b4a61;border-radius:12px;padding:13px 11px;min-height:65px}.area b{display:block;font-size:.89rem}.area small{color:var(--muted);font-size:.79rem}.area.selected{border-color:#a5b4fc;background:#293a68;box-shadow:0 0 0 1px #a5b4fc}.qty{display:flex;align-items:center;justify-content:space-between;background:#202d41;padding:13px 15px;border-radius:12px;margin-top:14px}.qty .num{font-size:1.4rem;font-weight:900;color:#c7d2fe}
+    .btn{display:inline-flex;align-items:center;justify-content:center;text-align:center;gap:8px;min-height:49px;width:100%;padding:12px 14px;background:#8b9cfb;color:#0b1023;border:1px solid transparent;border-radius:12px;font-weight:900;text-decoration:none;transition:transform .12s,background .12s}.btn:active{transform:scale(.985)}.btn.secondary{background:#27354b;color:#eef2ff;border-color:#4a5b73}.btn[disabled]{opacity:.55;cursor:not-allowed}.buttons{display:flex;gap:8px}.buttons>*{flex:1}.notice{margin:13px 0;padding:11px 12px;background:#30291b;border:1px solid #6b5632;border-radius:11px;font-size:.83rem;color:#fde68a}.info{background:#1d2940;border-color:#45597b;color:#cbd5e1}
+    .section-step{color:var(--brand);font-size:.73rem;font-weight:900;letter-spacing:.12em}.mock{margin-top:16px;border-top:1px solid var(--line);padding-top:17px}.mock[hidden], .success[hidden], [hidden]{display:none!important}.captcha-box{display:grid;grid-template-columns:1fr 47px;gap:8px;align-items:stretch;margin:13px 0}.captcha-box canvas{background:#edf2f8;border-radius:10px;display:block;width:100%;height:82px}.reload{background:#24344d;color:#fff;border:1px solid #4a5c78;border-radius:10px;font-size:1.5rem}.field{width:100%;min-height:49px;border-radius:11px;border:1px solid #64748b;background:#0b1424;padding:12px 13px;color:#fff;font-size:1rem}.field::placeholder{color:#8697b0}.field:focus{border-color:#a5b4fc}.alert{min-height:19px;font-size:.85rem;margin:9px 0}.alert.bad{color:#fca5a5}.alert.ok{color:var(--good)}.success{text-align:center;padding:10px 0}.success .check{font-size:2.6rem}.summary{background:#1d2b42;border:1px solid #405273;border-radius:12px;padding:14px;margin:12px 0;text-align:left}.summary strong{color:#c7d2fe}
+    .steps{margin:10px 0 14px;padding-left:24px}.steps li{padding:5px 0;color:#d3dfec}.steps li::marker{color:#a5b4fc;font-weight:800}.preview{display:flex;align-items:flex-start;justify-content:space-between;gap:9px;border-radius:13px;padding:12px;background:#202d42;border:1px solid #394a61;margin-bottom:12px}.preview b{font-size:.92rem}.preview span{display:block;color:var(--muted);font-size:.8rem}.status{font-size:.85rem;min-height:23px;color:var(--good)}.footer{border-top:1px solid #2a384c;padding-top:18px;margin-top:28px;color:#91a0b4;font-size:.77rem}.mini-link{font-size:.84rem}
+    @media(max-width:380px){.area-grid{grid-template-columns:1fr}.shell{padding-left:12px;padding-right:12px}.hero h1{font-size:1.42rem}.buttons{flex-direction:column}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <header><div class="brand"><i>◈</i> TICKET LAB <span class="subtle">/ Safari</span></div><span class="pill">非官方・純前端</span></header>
+  <section class="hero" aria-label="練習活動資訊">
+    <div class="eyebrow">IPHONE 購票流程助手</div>
+    <h1>BTS 高雄場<br>模擬購票練習</h1>
+    <p>在自己的練習頁面熟悉流程；正式購票仍由你親自操作。</p>
+    <div class="event-line"><span>📍 高雄國家體育場</span><span>📅 2026/11/22（日）19:00</span><span>🎫 1 張</span></div>
+  </section>
+
+  <div class="nav" role="tablist" aria-label="操作模式">
+    <button id="tab-practice" class="tab" role="tab" aria-selected="true" aria-controls="panel-practice">🎯 模擬練習</button>
+    <button id="tab-manual" class="tab" role="tab" aria-selected="false" aria-controls="panel-manual">🧭 正式購票輔助</button>
+  </div>
+
+  <section id="panel-practice" class="panel is-active" role="tabpanel" aria-labelledby="tab-practice">
+    <article class="card">
+      <div class="section-step">STEP 01 / 模擬選區</div>
+      <h2>選擇練習票區</h2>
+      <p>以下票區及價格取自你提供的 Discord 截圖，僅作練習，不代表目前有票。</p>
+      <div id="practice-areas" class="area-grid" role="group" aria-label="練習票區"></div>
+      <div class="qty"><div><strong>票券張數</strong><div class="subtle">依你的設定固定為 1 張</div></div><div class="num">1</div></div>
+      <button id="start-practice" class="btn" type="button" style="margin-top:16px">開始練習驗證碼</button>
+    </article>
+
+    <article id="captcha-stage" class="card mock" hidden>
+      <div class="section-step">STEP 02 / 純本機練習</div>
+      <h2>手動輸入模擬驗證碼</h2>
+      <p>這是網頁自己產生的隨機字元圖，不是真實拓元驗證碼，也不會向拓元送出任何請求。</p>
+      <div class="captcha-box"><canvas id="captcha" width="420" height="100" role="img" aria-label="本機產生的模擬圖形驗證碼，請讀取後輸入下方欄位"></canvas><button id="refresh-captcha" type="button" class="reload" aria-label="更換練習驗證碼">↻</button></div>
+      <form id="captcha-form">
+        <label class="label" for="captcha-input">輸入上方 5 位英數字</label>
+        <input id="captcha-input" class="field" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="5" placeholder="例如：AB7KT" required>
+        <div id="captcha-feedback" class="alert" aria-live="polite"></div>
+        <button class="btn" type="submit">確認模擬驗證碼</button>
+      </form>
+    </article>
+
+    <article id="practice-success" class="card success" hidden>
+      <div class="check" aria-hidden="true">✅</div><h2>模擬流程完成</h2>
+      <p>這只是練習完成，不是實際購票成功。</p>
+      <div class="summary" id="practice-summary"></div>
+      <button id="retry" class="btn secondary" type="button">再練習一次</button>
+    </article>
+  </section>
+
+  <section id="panel-manual" class="panel" role="tabpanel" aria-labelledby="tab-manual">
+    <article class="card">
+      <div class="section-step">PERSONAL CHECKLIST / 人工購票</div>
+      <h2>你的購票偏好</h2>
+      <p>選好偏好票區後可以複製成文字；正式網站中的票區與張數仍需你手動選擇。</p>
+      <label for="manual-area" class="label">優先票區</label>
+      <select id="manual-area" class="field"></select>
+      <div class="preview"><div><b id="manual-summary">預設偏好：A5區</b><span>欲購買張數：1 張（自行選擇）</span></div><span>🎫</span></div>
+      <button id="copy-plan" class="btn secondary" type="button">複製票區與張數</button>
+      <div id="manual-feedback" class="status" role="status" aria-live="polite"></div>
+    </article>
+
+    <article class="card">
+      <h2>開啟拓元官方購票頁</h2>
+      <p>預填的是你截圖中的拓元連結。你也可以改貼其他活動網址；本工具不會在拓元頁面插入腳本或代替點擊。</p>
+      <label for="event-url" class="label">活動網址（限 tixcraft.com）</label>
+      <input id="event-url" class="field" type="url" inputmode="url" autocomplete="url" spellcheck="false" value="https://tixcraft.com/ticket/area/26_btskhs/22764">
+      <div class="notice info">部分深層購票連結可能需要已登入，或從活動頁重新選場次。若無法開啟，請回到拓元首頁手動操作。</div>
+      <button id="open-official" class="btn" type="button">開啟拓元網站（由我手動購票） ↗</button>
+      <div id="url-feedback" class="alert" role="status" aria-live="polite"></div>
+      <p class="mini-link"><a href="https://tixcraft.com/" rel="noopener noreferrer" target="_blank">備用：拓元官方首頁 ↗</a></p>
+    </article>
+
+    <article class="card">
+      <h2>人工購票檢查清單</h2>
+      <ol class="steps">
+        <li>事先登入拓元，完成會員與手機驗證。</li>
+        <li>從官方活動頁進入正確場次，確認日期、時間及購票規則。</li>
+        <li>人工選擇希望的票區，並將票數設為 <b>1 張</b>。</li>
+        <li>如出現驗證或排隊，依官方指示親自完成，不使用自動工具。</li>
+        <li>檢查姓名、座位、票價、付款方式，確認後自行結帳。</li>
+      </ol>
+      <div class="notice">依拓元官方說明，購票時不要同時使用多視窗或多裝置，以免訂購失敗；票況會隨其他購票者操作而變動。</div>
+      <p class="mini-link"><a href="https://help.tixcraft.com/hc/zh-tw/articles/4404363906961" target="_blank" rel="noopener noreferrer">拓元官方購票流程說明 ↗</a></p>
+    </article>
+  </section>
+
+  <p class="footer">Ticket Lab 是個人練習用工具，與拓元、演唱會或主辦單位無關。無即時票況、無自動刷新、無機器購票或第三方驗證碼辨識。不需要帳號密碼，偏好只留在目前瀏覽器。</p>
+</main>
+<script>
+(() => {
+  'use strict';
+  const AREAS = [
+    ['A5區', 9380], ['1樓C05區', 7980], ['1樓C07區', 7980],
+    ['1樓G07區', 7980], ['1樓G08區', 7980], ['A13區', 6980],
+    ['1樓V05區', 6980], ['1樓E06區', 5980], ['1樓E08區', 5980],
+    ['1樓E09區', 5980], ['1樓F10區', 5980]
+  ];
+  const $ = id => document.getElementById(id);
+  const fmt = n => new Intl.NumberFormat('zh-TW').format(n);
+  const save = (key, val) => { try { localStorage.setItem(key, val); } catch (_) {} };
+  const load = key => { try { return localStorage.getItem(key); } catch (_) { return null; } };
+  let area = AREAS.find(a => a[0] === load('ticketlab.area')) || AREAS[0];
+  let captchaAnswer = '';
+  let practiceStart = 0;
+
+  function setMode(mode) {
+    const practice = mode === 'practice';
+    $('panel-practice').classList.toggle('is-active', practice);
+    $('panel-manual').classList.toggle('is-active', !practice);
+    $('tab-practice').setAttribute('aria-selected', String(practice));
+    $('tab-manual').setAttribute('aria-selected', String(!practice));
+  }
+  $('tab-practice').addEventListener('click', () => setMode('practice'));
+  $('tab-manual').addEventListener('click', () => setMode('manual'));
+
+  function renderAreas() {
+    const grid = $('practice-areas');
+    const select = $('manual-area');
+    grid.replaceChildren(); select.replaceChildren();
+    AREAS.forEach(([name, price]) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'area' + (name === area[0] ? ' selected' : '');
+      button.setAttribute('aria-pressed', String(name === area[0]));
+      const title = document.createElement('b'); title.textContent = name;
+      const small = document.createElement('small'); small.textContent = 'NT$ ' + fmt(price);
+      button.append(title, small);
+      button.addEventListener('click', () => updateArea(name));
+      grid.append(button);
+      const option = document.createElement('option'); option.value = name; option.textContent = name + ' · NT$ ' + fmt(price);
+      select.append(option);
+    });
+    select.value = area[0];
+    $('manual-summary').textContent = area[0] + '｜NT$ ' + fmt(area[1]);
+  }
+  function updateArea(name) {
+    area = AREAS.find(a => a[0] === name) || AREAS[0];
+    save('ticketlab.area', area[0]);
+    renderAreas();
+    // Selecting a different area resets the prior mock practice result.
+    resetPractice(false);
+  }
+  $('manual-area').addEventListener('change', e => updateArea(e.target.value));
+
+  function newCaptcha() {
+    const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const random = new Uint32Array(5);
+    if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(random);
+    else for (let i = 0; i < 5; i++) random[i] = Math.floor(Math.random()*100000);
+    captchaAnswer = Array.from(random, n => alphabet[n % alphabet.length]).join('');
+    const canvas = $('captcha');
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    ctx.fillStyle = '#eef3fb'; ctx.fillRect(0, 0, w, h);
+    for (let i = 0; i < 5; i++) {
+      ctx.save();
+      ctx.translate(47 + i * 76, 55 + (Math.random()-0.5) * 13);
+      ctx.rotate((Math.random()-0.5) * .24);
+      ctx.font = 'bold 56px ui-monospace, Menlo, monospace';
+      ctx.fillStyle = ['#1e3a8a','#312e81','#064e3b'][i % 3];
+      ctx.fillText(captchaAnswer[i], -16, 15);
+      ctx.restore();
+    }
+    for (let i = 0; i < 4; i++) {
+      ctx.beginPath(); ctx.moveTo(Math.random()*w, Math.random()*h);
+      ctx.lineTo(Math.random()*w, Math.random()*h);
+      ctx.strokeStyle = '#aab9d1'; ctx.lineWidth = 1.5; ctx.stroke();
+    }
+    $('captcha-input').value = '';
+    $('captcha-feedback').textContent = '';
+    $('captcha-feedback').className = 'alert';
+  }
+  function resetPractice(hideStage) {
+    $('practice-success').hidden = true;
+    if (hideStage) $('captcha-stage').hidden = true;
+    else if (!$('captcha-stage').hidden) { newCaptcha(); practiceStart = performance.now(); }
+  }
+  $('start-practice').addEventListener('click', () => {
+    $('captcha-stage').hidden = false;
+    $('practice-success').hidden = true;
+    practiceStart = performance.now();
+    newCaptcha();
+    $('captcha-stage').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  $('refresh-captcha').addEventListener('click', newCaptcha);
+  $('captcha-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const typed = $('captcha-input').value.trim().toUpperCase();
+    if (typed !== captchaAnswer) {
+      $('captcha-feedback').textContent = '不正確，請再試一次，或點 ↻ 更換練習題。';
+      $('captcha-feedback').className = 'alert bad';
+      return;
+    }
+    const elapsed = Math.max(.1, (performance.now()-practiceStart)/1000).toFixed(1);
+    $('captcha-feedback').textContent = '模擬驗證碼正確！';
+    $('captcha-feedback').className = 'alert ok';
+    $('captcha-stage').hidden = true;
+    const summary = $('practice-summary');
+    summary.replaceChildren();
+    const s1 = document.createElement('div'); s1.textContent = '練習票區：' + area[0];
+    const s2 = document.createElement('div'); s2.textContent = '練習票價：NT$ ' + fmt(area[1]);
+    const s3 = document.createElement('div'); s3.textContent = '張數：1 張';
+    const s4 = document.createElement('div'); s4.textContent = '完成時間：' + elapsed + ' 秒';
+    summary.append(s1,s2,s3,s4);
+    $('practice-success').hidden = false;
+    $('practice-success').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  $('retry').addEventListener('click', () => {
+    resetPractice(true);
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  const storedUrl = load('ticketlab.url');
+  if (storedUrl) $('event-url').value = storedUrl;
+  $('event-url').addEventListener('change', () => save('ticketlab.url', $('event-url').value.trim()));
+  $('open-official').addEventListener('click', () => {
+    let url;
+    try {
+      url = new URL($('event-url').value.trim());
+      if (url.protocol !== 'https:' || !(url.hostname === 'tixcraft.com' || url.hostname.endsWith('.tixcraft.com')) || url.username || url.password) throw new Error('invalid host');
+    } catch (_) {
+      $('url-feedback').textContent = '請輸入合法的 https://tixcraft.com/... 網址。';
+      $('url-feedback').className = 'alert bad'; return;
+    }
+    save('ticketlab.url', url.href);
+    $('url-feedback').textContent = '已嘗試在 Safari 開啟官方頁面，請自行完成操作。';
+    $('url-feedback').className = 'alert ok';
+    window.open(url.href, '_blank', 'noopener,noreferrer');
+  });
+  $('copy-plan').addEventListener('click', async () => {
+    const message = '購票偏好：' + area[0] + '／NT$ ' + fmt(area[1]) + '／1 張（票區與價格僅供參考，正式網站需自行確認）';
+    try {
+      if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(message);
+      else {
+        const ta = document.createElement('textarea');
+        ta.value = message; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        if (!document.execCommand('copy')) throw new Error('copy unsupported');
+        ta.remove();
+      }
+      $('manual-feedback').textContent = '已複製：' + area[0] + '，1 張。';
+    } catch (_) {
+      $('manual-feedback').textContent = '無法自動複製，請手動記下：' + area[0] + '，1 張。';
+    }
+  });
+  renderAreas();
+})();
+</script>
+</body>
+</html>
